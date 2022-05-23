@@ -13,7 +13,7 @@ import (
 
 var DefaultSavePath = "storage/logs/log.log" // 日志默认保存路径
 
-type Logger struct {}
+type Logger struct{}
 
 func init() {
 	cfg, err := goconfig.LoadConfigFile("config/logger.ini")
@@ -42,7 +42,7 @@ func (l *Logger) record(msg interface{}, target string) error {
 
 	file, err := os.OpenFile(target, os.O_APPEND|os.O_CREATE, 666)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Could not create filer %s", target))
+		return errors.New(fmt.Sprintf("Could not create filer %s, err: %v", target, err))
 	}
 	defer file.Close()
 
@@ -66,7 +66,7 @@ func Println(msg interface{}, args ...interface{}) {
 func Info(msg interface{}, args ...interface{}) {
 	if err := new(Logger).record(msg, makepath(args...)); err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		//os.Exit(1)
 	}
 }
 
